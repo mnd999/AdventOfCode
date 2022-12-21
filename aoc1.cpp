@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
       int a;
       if (!(iss >> a)) {
         break;
-      }  // error
+      } // error
       tot += a;
     } else {
       totals.push_back(tot);

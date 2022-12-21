@@ -10,33 +10,33 @@ int part2() {
     std::string a, b;
     if (!(iss >> a >> b)) {
       break;
-    }  // error
-       
+    } // error
+
     if (b == "X") {
-      if (a == "A")  {
-        score += 3; 
+      if (a == "A") {
+        score += 3;
       } else if (a == "B") {
         score += 1;
       } else if (a == "C") {
         score += 2;
       }
     } else if (b == "Y") {
-      score +=3;
+      score += 3;
       if (a == "A") {
-        score +=1;
+        score += 1;
       } else if (a == "B") {
-        score +=2;
+        score += 2;
       } else if (a == "C") {
         score += 3;
       }
     } else if (b == "Z") {
-      score +=6;
+      score += 6;
       if (a == "A") {
-        score +=2;
+        score += 2;
       } else if (a == "B") {
-        score +=3;
+        score += 3;
       } else if (a == "C") {
-        score +=1;
+        score += 1;
       }
     }
   }
@@ -53,33 +53,30 @@ int part1() {
     std::string a, b;
     if (!(iss >> a >> b)) {
       break;
-    }  // error
-    
+    } // error
+
     if (b == "X") {
-      score +=1;
-      if (a == "A")  {
-        score +=3; 
+      score += 1;
+      if (a == "A") {
+        score += 3;
       } else if (a == "C") {
         score += 6;
       }
     } else if (b == "Y") {
-      score +=2;
+      score += 2;
       if (a == "B") {
-        score +=3;
+        score += 3;
       } else if (a == "A") {
-        score +=6;
+        score += 6;
       }
-    }
-    else if (b == "Z") {
-      score +=3;
+    } else if (b == "Z") {
+      score += 3;
       if (a == "B") {
-        score +=6;
+        score += 6;
       } else if (a == "C") {
-        score +=3;
+        score += 3;
       }
-
     }
-
   }
   return score;
 }
@@ -89,5 +86,3 @@ int main() {
 
   std::cout << score << "\n";
 }
-
-
