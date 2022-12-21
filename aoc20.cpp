@@ -1,5 +1,5 @@
-#include <cmath>
 #include <iostream>
+#include <numeric>
 #include <sstream>
 #include <list>
 #include <vector>
@@ -29,14 +29,8 @@ int main() {
   }
   cout << "\n";
 
-  vector<list<long>::iterator> ps;
- 
-  int i = 0;
-  for (list<long>::iterator it = cipher.begin(); it != cipher.end(); ++it) {
-    auto cit = cipher.begin();
-    advance(cit, i++);
-    ps.push_back(cit);
-  }
+  vector<list<long>::iterator> ps(cipher.size());
+  iota(ps.begin(), ps.end(), cipher.begin());
 
   for (int mix = 0; mix < 10; mix++) {
   for (int i = 0; i < ps.size(); i++) {
