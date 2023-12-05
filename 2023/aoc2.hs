@@ -42,6 +42,15 @@ filterGames gs = filter (\g -> all pickIsValid (picks g)) gs
 pickIsValid :: Pick -> Bool
 pickIsValid p = (red p) <= 12 && (green p) <= 13 && (blue p) <= 14
 
+minValuesForGame:: Game -> (Int, Int, Int) 
+minValuesForGame g = foldr foldPick (0,0,0) (picks g)
+
+foldPick :: Pick -> (Int, Int, Int) -> (Int, Int, Int)
+foldPick p (r, g, b) = (max r (red p), max g (green p), max b (blue p))
+
+power:: (Int, Int, Int) -> Int
+power (r,g,b) = r * g * b
+
 main :: IO ()
 
 main = do 
@@ -49,4 +58,7 @@ main = do
   let games = map parse (splitOn '\n' lines)
   let fgames = filterGames games
   let total = sum (map Main.id fgames)
-  print total
+  let mvs = map minValuesForGame games
+  let powers = map power mvs
+  let total2 = sum powers
+  print total2
