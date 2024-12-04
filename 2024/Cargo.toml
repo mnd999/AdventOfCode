@@ -14,3 +14,6 @@ name="aoc2"
 
 [[bin]]
 name="aoc3"
+
+[[bin]]
+name="aoc4"
