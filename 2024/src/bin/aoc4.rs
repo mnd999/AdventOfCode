@@ -27,11 +27,13 @@ fn main() -> io::Result<()> {
     }
 
     let mut total = 0;
+    let mut total2 = 0;
     let mut x = 0;
     let mut y = 0;
     while x < row_cnt {
         while y < puzzle[x].len() {
             total = total + find_xmas_at(&puzzle, x, y);
+            total2 = total2 + find_mas_at(&puzzle, x, y);
             y = y + 1;
         }
         x = x + 1;
@@ -42,8 +44,30 @@ fn main() -> io::Result<()> {
     print!("{}\n", row_cnt);
     print!("{:?}\n", puzzle);
     print!("Part 1: {}\n", total);
+    print!("Part 2: {}\n", total2);
 
     Ok(())
+}
+
+fn find_mas_at(puzzle: &Vec<Vec<char>>, x: usize, y: usize) -> i32 {
+
+    let mut tot = 0;
+
+    // We are not an 'A' or we are on the edges
+    if puzzle[x][y] != 'A' || x == 0 || y == 0 || x == (puzzle[x].len() -1) || y == (puzzle.len() -1 ) {
+        // println!("({},{}), tot: {}", x, y, tot);
+        return 0;
+    }
+
+
+    if (puzzle[x-1][y-1] == 'M' && puzzle[x+1][y+1] == 'S' || puzzle[x-1][y-1] == 'S' && puzzle[x+1][y+1] == 'M') {
+        if (puzzle[x+1][y-1] == 'M' && puzzle[x-1][y+1] == 'S' || puzzle[x+1][y-1] == 'S' && puzzle[x-1][y+1] == 'M') {
+            tot = tot + 1;
+        }
+    }
+
+
+    return tot;
 }
 
 
@@ -96,8 +120,5 @@ fn find_xmas_at(puzzle: &Vec<Vec<char>>, x: usize, y: usize) -> i32 {
         tot = tot + 1;
     }
 
-
-    println!("({},{}), tot: {}", x, y, tot);
-
-    return tot;
+   return tot;
 }
