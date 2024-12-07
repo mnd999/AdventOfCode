@@ -25,7 +25,7 @@ fn main() -> io::Result<()> {
         let mut row_done = false;
         while !stack.is_empty() && !row_done {
             let (op, ns) = stack.pop().unwrap();
-            println!("'{}' {:?}", op, ns);
+            // println!("'{}' {:?}", op, ns);
             let mut nvec: Vec<i64>= Vec::new();
             if ns.len() == 1 {
                 if ns[0] == target {
@@ -49,7 +49,6 @@ fn main() -> io::Result<()> {
                 }
             } else if op == "||" {
                 let combined = ns[0].to_string() + &ns[1].to_string();
-                println!("{} {} {} ", ns[0], ns[1], combined);
                 let t = combined.parse::<i64>().unwrap();
                 if t <= target {
                     nvec.push(t);
@@ -63,7 +62,7 @@ fn main() -> io::Result<()> {
                 nvec.push(ns[i]);
                 i = i + 1;
             }
-            println!("{:?}", nvec);
+            // println!("{:?}", nvec);
             stack.push(("+", nvec.clone()));
             stack.push(("*", nvec.clone()));
             stack.push(("||", nvec.clone()));
