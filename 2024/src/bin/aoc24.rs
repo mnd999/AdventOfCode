@@ -34,13 +34,19 @@ fn main() -> io::Result<()> {
     println!("{:?}", vars);
     println!("{:?}", fns);
 
-    let bin = solve(vars, fns);
+    let xinput = to_dec(&vars, "x");
+    let yinput = to_dec(&vars, "y");
+    let target = xinput + yinput;
+
+    println!("x+y: {}", target);
+
+    solve(vars, fns);
    
-    println!("res: {} {}", bin, isize::from_str_radix(&bin, 2).unwrap());    
+       
     Ok(())
 }
 
-fn solve(inputs: HashMap<String, u32>,  functions: Vec<(String, Op, String, String)>) -> String {
+fn solve(inputs: HashMap<String, u32>,  functions: Vec<(String, Op, String, String)>) -> isize {
     let mut fns = VecDeque::from(functions);
     let mut vars = HashMap::from(inputs);
     while !fns.is_empty() {
@@ -79,14 +85,17 @@ fn solve(inputs: HashMap<String, u32>,  functions: Vec<(String, Op, String, Stri
         }
     }
 
+    return to_dec(&vars, &"z");
+}
 
-     let mut zs: Vec<(&String, &u32)> = vars.iter().filter(|(k,_)| k.starts_with("z")).collect::<Vec<(&String, &u32)>>();
-     zs.sort_by(|(k,_), (k1, _)| k.cmp(k1).reverse());
+fn to_dec(vars: &HashMap<String, u32>, prefix: &str) -> isize {
+    let mut zs: Vec<(&String, &u32)> = vars.iter().filter(|(k,_)| k.starts_with(prefix)).collect::<Vec<(&String, &u32)>>();
+    zs.sort_by(|(k,_), (k1, _)| k.cmp(k1).reverse());
 
-     println!("Zs: {:?}", zs);
-
-     let s = zs.iter().map(|(_,v)| std::char::from_digit(**v, 2).unwrap()).collect();
-     return s;
+    let binstr :String = zs.iter().map(|(_,v)| std::char::from_digit(**v, 2).unwrap()).collect();
+    let decval = isize::from_str_radix(&binstr, 2).unwrap();
+    println!("{}: {} {}", prefix, binstr, decval); 
+    return decval;
 }
  
 fn to_op(s: &str) -> Op {
