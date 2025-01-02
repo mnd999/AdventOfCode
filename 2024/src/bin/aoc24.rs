@@ -16,8 +16,8 @@ enum Op {
 
 fn main() -> io::Result<()> {
     let lines = io::stdin().lines();
-    let mut vars: HashMap<String, i32> = HashMap::new();
-    let mut fns: VecDeque<(String, Op, String, String)> = VecDeque::new();
+    let mut vars: HashMap<String, u32> = HashMap::new();
+    let mut fns: Vec<(String, Op, String, String)> = Vec::new();
 
     let re1 = Regex::new(r"^([a-z][0-9][0-9]): ([01])").unwrap();
     let re2 = Regex::new(r"^([a-z0-9]+) ([A-Z]+) ([a-z0-9]+) -> ([a-z0-9]+)").unwrap();
@@ -26,14 +26,23 @@ fn main() -> io::Result<()> {
         let l = line.unwrap();
         println!("{}", &l);
 
-        re1.captures(&l).map( |cap| vars.insert(cap[1].to_string(), cap[2].parse::<i32>().unwrap()));
+        re1.captures(&l).map( |cap| vars.insert(cap[1].to_string(), cap[2].parse::<u32>().unwrap()));
 
-        re2.captures(&l).map( |cap| fns.push_back((cap[1].to_string(), to_op(&cap[2]), cap[3].to_string(), cap[4].to_string())));
+        re2.captures(&l).map( |cap| fns.push((cap[1].to_string(), to_op(&cap[2]), cap[3].to_string(), cap[4].to_string())));
 
     }
     println!("{:?}", vars);
     println!("{:?}", fns);
 
+    let bin = solve(vars, fns);
+   
+    println!("res: {} {}", bin, isize::from_str_radix(&bin, 2).unwrap());    
+    Ok(())
+}
+
+fn solve(inputs: HashMap<String, u32>,  functions: Vec<(String, Op, String, String)>) -> String {
+    let mut fns = VecDeque::from(functions);
+    let mut vars = HashMap::from(inputs);
     while !fns.is_empty() {
         let (x, o, y, r) = fns.pop_front().unwrap();
         if vars.contains_key(&x) && vars.contains_key(&y) {
@@ -71,17 +80,15 @@ fn main() -> io::Result<()> {
     }
 
 
-     let mut zs: Vec<(&String, &i32)> = vars.iter().filter(|(k,_)| k.starts_with("z")).collect::<Vec<(&String, &i32)>>();
-     zs.sort_by(|(k,_), (k1, _)| k.cmp(k1));
-     zs.reverse();
+     let mut zs: Vec<(&String, &u32)> = vars.iter().filter(|(k,_)| k.starts_with("z")).collect::<Vec<(&String, &u32)>>();
+     zs.sort_by(|(k,_), (k1, _)| k.cmp(k1).reverse());
 
      println!("Zs: {:?}", zs);
 
-     zs.iter().for_each(|(_,v)| print!("{}", v));
-
-    Ok(())
+     let s = zs.iter().map(|(_,v)| std::char::from_digit(**v, 2).unwrap()).collect();
+     return s;
 }
-
+ 
 fn to_op(s: &str) -> Op {
     return match s {
         "XOR" => Op::XOR,
